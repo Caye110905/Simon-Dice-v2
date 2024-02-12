@@ -272,6 +272,7 @@ import java.util.Random;
 			if (i == 12 - 3 && modo == 2) {
 				System.out.println("Has ganado, terminaste el juego");
 				puntuacion = puntuacion + 40;
+				puntuacionFinal = puntuacion;
 				menu();
 			}
 			if (i == 15 - 3 && modo == 3) {
