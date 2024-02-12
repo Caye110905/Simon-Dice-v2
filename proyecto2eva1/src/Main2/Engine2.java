@@ -243,6 +243,7 @@ import java.util.Random;
 			}else if(modo == 3) {
 				while(k < (3 + i)) {
 					System.out.println("Introduce el color en la posición " + (k + 1) + ": ");
+					System.out.println("Introduce x para tener una ayuda (tienes " + ayuda + " ayudas");
 					char secuenciaUsuario = new Scanner(System.in).next().charAt(0);
 					if(ayuda == 0 && secuenciaUsuario == 'x') {
 						System.out.println("no te quedan ayudas, juegatela");
