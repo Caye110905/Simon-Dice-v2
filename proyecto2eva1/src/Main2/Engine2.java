@@ -21,8 +21,8 @@ import java.util.Random;
 	/**
 	 * Array donde se fija el numero maximo de secuencia de colores.
 	 */
-	private int MAX_COLORES_facil = 4;
-	private int MAX_COLORES_dificil = 7;
+	private int MAX_COLORES_SEQ = 4;
+	private int MAX_COLORES_SEQ1 = 7;
 	private tColores1[] secuenciaColores = new tColores1[12];
 	private tColores1[] secuenciaColores1 = new tColores1[15];
 
@@ -201,7 +201,6 @@ import java.util.Random;
 	    int ayuda = 3;
 		int salida = 0;
 		int puntuacion = 0;
-		int secuencia = 0;
 		int puntuacionFinal = 0;
 		int modo = menu();
 		generarSecuencia(15, modo);
