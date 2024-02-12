@@ -200,6 +200,9 @@ import java.util.Random;
 	public void play() {
 	    int ayuda = 3;
 		int salida = 0;
+		int puntuacion = 0;
+		int secuencia = 0;
+		int puntuacionFinal = 0;
 		int modo = menu();
 		generarSecuencia(15, modo);
 		for (int i = 0; i < 20; i++) {
@@ -229,6 +232,8 @@ import java.util.Random;
 					tColores1 colorEscogido = charToColor(secuenciaUsuario,secuenciaColores[k]);
 					if (comprobarColor(k, colorEscogido)) {
 						System.out.println("Correcto, bien hecho");
+						puntuacion = puntuacion + 2;
+						System.out.println("Tu puntuacion es " + puntuacion);
 					} else {
 						System.out.println("Incorrecto, fin del juego");
 						salida = 1;
@@ -247,9 +252,12 @@ import java.util.Random;
 					tColores1 colorEscogido = charToColor(secuenciaUsuario,secuenciaColores1[k]);
 					if(secuenciaUsuario == 'x') {
 						ayuda = ayuda - 1;
+						puntuacion = puntuacion - 10;
 					}
 					if (comprobarColor1(k, colorEscogido) || secuenciaUsuario == 'x') {
 						System.out.println("Correcto, bien hecho");
+						puntuacion = puntuacion + 2;
+						System.out.println("Tu puntuacion es " + puntuacion);
 					} else {
 						System.out.println("Incorrecto, fin del juego");
 						salida = 1;
@@ -264,10 +272,17 @@ import java.util.Random;
 	
 			if (i == 12 - 3 && modo == 2) {
 				System.out.println("Has ganado, terminaste el juego");
+				puntuacion = puntuacion + 40;
 				menu();
 			}
 			if (i == 15 - 3 && modo == 3) {
 				System.out.println("Has ganado, terminaste el juego");
+				puntuacion = puntuacion + 40;
+				puntuacionFinal = puntuacionFinal * 2;
+				puntuacionFinal = puntuacion;
+				if(puntuacionFinal < 0) {
+					puntuacionFinal = 0;
+				}
 				menu();
 			}
 			
