@@ -21,8 +21,8 @@ import java.util.Random;
 	/**
 	 * Array donde se fija el numero maximo de secuencia de colores.
 	 */
-	private int MAX_COLORES_SEQ = 4;
-	private int MAX_COLORES_SEQ1 = 7;
+	private int MAX_COLORES_facil = 4;
+	private int MAX_COLORES_dificil = 7;
 	private tColores1[] secuenciaColores = new tColores1[12];
 	private tColores1[] secuenciaColores1 = new tColores1[15];
 
@@ -34,7 +34,7 @@ import java.util.Random;
 	 * @param _color representa el caracter del color introducido por el usuario.
 	 * @return
 	 */
-	public tColores1 charToColor(char _color,tColores1 color) {
+	public tColores1 charToColor(char _color, tColores1 color) {
 		tColores1 colores = null;
 		char letraColores = Character.toLowerCase(_color);
 		
@@ -61,7 +61,7 @@ import java.util.Random;
 			colores = tColores1.Naranja;
 			break;
 		case 'x':
-			System.out.println("el siguiente era " + color);
+			System.out.println("El siguiente color es " + color);
 			break;
 		}
 		return colores;
@@ -133,12 +133,10 @@ import java.util.Random;
 	 * @return
 	 */
 	public boolean comprobarColor1(int _index, tColores1 _color) {
-		
 		return secuenciaColores1[_index] == _color;
 
 	}
 	public boolean comprobarColor(int _index, tColores1 _color) {
-		
 		return secuenciaColores[_index] == _color;
 
 	}
@@ -178,7 +176,8 @@ import java.util.Random;
 			System.out.println("Empieza el modo dificil");
 		}else {
 			System.out.println("Número no disponible");
-			System.exit(0);		}
+			System.exit(0);		
+		}
 		return menu;
 	}
 
@@ -202,7 +201,7 @@ import java.util.Random;
 	    int ayuda = 3;
 		int salida = 0;
 		int modo = menu();
-		generarSecuencia(15,modo);
+		generarSecuencia(15, modo);
 		for (int i = 0; i < 20; i++) {
 			int k = 0;
 			System.out.println("Pulsa ENTER para empezar a jugar");
@@ -210,7 +209,7 @@ import java.util.Random;
 			for(int j = 0; j < 30; j++) {
 				System.out.println();
 			}
-			mostrarSecuencia(3 + i,modo);
+			mostrarSecuencia(3 + i, modo);
 			System.out.println();
 			
 			int numerosecuencia = i + 1;
@@ -224,21 +223,21 @@ import java.util.Random;
 			
 			System.out.println("¿Cuál era la secuencia de colores?");
 			if(modo == 2) {
-			while(k<(3 + i)) {
-				System.out.println("Introduce el color en la posición " + (k + 1) + ": ");
-				char secuenciaUsuario = new Scanner(System.in).next().charAt(0);
-				tColores1 colorEscogido = charToColor(secuenciaUsuario,secuenciaColores[k]);
-				if (comprobarColor(k, colorEscogido)) {
-					System.out.println("Correcto, bien hecho");
-				} else {
-					System.out.println("Incorrecto, fin del juego");
-					salida = 1;
-					k = 3+i;	
+				while(k < (3 + i)) {
+					System.out.println("Introduce el color en la posición " + (k + 1) + ": ");
+					char secuenciaUsuario = new Scanner(System.in).next().charAt(0);
+					tColores1 colorEscogido = charToColor(secuenciaUsuario,secuenciaColores[k]);
+					if (comprobarColor(k, colorEscogido)) {
+						System.out.println("Correcto, bien hecho");
+					} else {
+						System.out.println("Incorrecto, fin del juego");
+						salida = 1;
+						k = 3 + i;	
+					}
+					k++;
 				}
-				k++;
-			}
 			}else if(modo == 3) {
-				while(k<(3 + i)) {
+				while(k < (3 + i)) {
 					System.out.println("Introduce el color en la posición " + (k + 1) + ": ");
 					char secuenciaUsuario = new Scanner(System.in).next().charAt(0);
 					if(ayuda == 0 && secuenciaUsuario == 'x') {
@@ -247,25 +246,27 @@ import java.util.Random;
 					}
 					tColores1 colorEscogido = charToColor(secuenciaUsuario,secuenciaColores1[k]);
 					if(secuenciaUsuario == 'x') {
-						ayuda = ayuda-1;
+						ayuda = ayuda - 1;
 					}
 					if (comprobarColor1(k, colorEscogido) || secuenciaUsuario == 'x') {
 						System.out.println("Correcto, bien hecho");
 					} else {
 						System.out.println("Incorrecto, fin del juego");
 						salida = 1;
-						k = 3+i;
+						k = 3 + i;
 					}
 					k++;
 				}
 			}
-			if(salida == 1) {System.exit(0);}
+			if(salida == 1) {
+				System.exit(0);
+			}
 	
-			if (i == 12-3 && modo == 2) {
+			if (i == 12 - 3 && modo == 2) {
 				System.out.println("Has ganado, terminaste el juego");
 				menu();
 			}
-			if (i == 15-3 && modo == 3) {
+			if (i == 15 - 3 && modo == 3) {
 				System.out.println("Has ganado, terminaste el juego");
 				menu();
 			}
