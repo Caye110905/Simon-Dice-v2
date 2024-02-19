@@ -17,13 +17,18 @@ import java.util.Random;
 	enum tColores1 {
 		Rojo, Verde, Azul, Dorado, Blanco, Marron, Naranja
 	}
+	enum tModo {
+		Facil, Dificil
+	}
 
 	/**
 	 * Array donde se fija el numero maximo de secuencia de colores.
 	 */
 	private int MAX_COLORES_SEQ = 4;
 	private int MAX_COLORES_SEQ1 = 7;
-	private tColores1[] secuenciaColores = new tColores1[12];
+	private int ayuda = 3;
+	private int salida = 0;
+	private Persona2 persona1 = new Persona2();
 	private tColores1[] secuenciaColores1 = new tColores1[15];
 
 	/**
@@ -61,7 +66,6 @@ import java.util.Random;
 			colores = tColores1.Naranja;
 			break;
 		case 'x':
-			System.out.println("El siguiente color es " + color);
 			break;
 		}
 		return colores;
@@ -102,29 +106,22 @@ import java.util.Random;
 		}
 		return posicion;
 	}
-
+	
+	
 	/**
 	 * Este método genera una secuencia con numeros random o aleatorios.
 	 * 
 	 * @param _numColores representa el número de colores que tiene el tipo
 	 *                    enumerado tColores.
 	 */
-	public void generarSecuencia(int _numColores, int menu) {
-		if(menu == 2) {
-			for (int i = 0; i < secuenciaColores.length; i++) {
-				Random random = new Random();
-				int aleatorio = random.nextInt(0, 4);
-				secuenciaColores[i] = intToColor(aleatorio);
-			} 	
-		}else if(menu == 3) {
+	public void generarSecuencia(int _numColores) {
 			for (int i = 0; i < secuenciaColores1.length; i++) {
 				Random random = new Random();
-				int aleatorio = random.nextInt(0, 7);
+				int aleatorio = random.nextInt(0, _numColores);
 				secuenciaColores1[i] = intToColor(aleatorio);
-			} 	
-		}
+			}
 	}
-
+		
 	/**
 	 * Este método comprueba si el jugador ha acertado o ha fallado el color.
 	 * 
@@ -136,49 +133,49 @@ import java.util.Random;
 		return secuenciaColores1[_index] == _color;
 
 	}
-	public boolean comprobarColor(int _index, tColores1 _color) {
-		return secuenciaColores[_index] == _color;
-
-	}
-
 	
 	/**
 	 * Este método muestra la secuencia por pantalla y, así, el jugador pueda
 	 * memorizarlo.
 	 * @param _numero número de la secuencia actual.
 	 */
-	public void mostrarSecuencia(int _numero, int modo) {
-		if(modo == 3) {
+	public void mostrarSecuencia(int _numero) {
 			for (int i = 0; i < _numero; i++) {
 				System.out.println(secuenciaColores1[i] + " ");
 			}
-		}else if(modo == 2) {
-			for (int i = 0; i < _numero; i++) {
-				System.out.println(secuenciaColores[i] + " ");
-			}	
-		}
 	}
-
+	
 	/**
 	 * Este es el menú de inicio para jugar.
 	 */
 	public int menu() {
+		persona1.setPuntuacion(0);
+		tModo modo = null;
+		int _numColores = 0;
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("1- Salir \n2- Jugar en modo fácil \n3- Jugar en modo difícil");
 		Scanner sc1 = new Scanner(System.in);
 		int menu = sc1.nextInt();
-		if (menu == 2) {
-			System.out.println("Empieza el modo facil");
-		} else if (menu == 1) {
+		switch (menu) {
+		case 1:
 			System.out.println("Salistes del juego");
 			System.exit(0);	
-		} else if (menu == 3) {
+			break;
+		case 2:
+			System.out.println("Empieza el modo facil");
+			modo = tModo.Facil;
+			_numColores = MAX_COLORES_SEQ;
+			break;
+		case 3:
 			System.out.println("Empieza el modo dificil");
-		}else {
+			modo = tModo.Dificil;
+			_numColores = MAX_COLORES_SEQ1;
+			break;
+		default:
 			System.out.println("Número no disponible");
-			System.exit(0);		
+			System.exit(0);
 		}
-		return menu;
+		return _numColores;
 	}
 
 	/**
@@ -190,20 +187,17 @@ import java.util.Random;
 		System.out.println("What is your name? ");
 		Scanner scanner = new Scanner(System.in);
 		String persona = scanner.nextLine();
-		System.out.println("Hello " + persona + ", press ENTER to start playing");
+		persona1.setNombre(persona);
+		System.out.println("Hello " + persona1.getNombre() + ", press ENTER to start playing");
 		play();
 	}
-
+	
 	/**
 	 * Control del juego.
 	 */
 	public void play() {
-	    int ayuda = 3;
-		int salida = 0;
-		int puntuacion = 0;
-		int puntuacionFinal = 0;
-		int modo = menu();
-		generarSecuencia(15, modo);
+		int _numColores = menu();
+		generarSecuencia(_numColores);
 		for (int i = 0; i < 20; i++) {
 			int k = 0;
 			System.out.println("Pulsa ENTER para empezar a jugar");
@@ -211,7 +205,7 @@ import java.util.Random;
 			for(int j = 0; j < 30; j++) {
 				System.out.println();
 			}
-			mostrarSecuencia(3 + i, modo);
+			mostrarSecuencia(3 + i);
 			System.out.println();
 			
 			int numerosecuencia = i + 1;
@@ -224,40 +218,28 @@ import java.util.Random;
 			}
 			
 			System.out.println("¿Cuál era la secuencia de colores?");
-			if(modo == 2) {
 				while(k < (3 + i)) {
 					System.out.println("Introduce el color en la posición " + (k + 1) + ": ");
+					System.out.println("Si quieres usar ayuda pulsa x (solo para modo dificil)");
 					char secuenciaUsuario = new Scanner(System.in).next().charAt(0);
-					tColores1 colorEscogido = charToColor(secuenciaUsuario,secuenciaColores[k]);
-					if (comprobarColor(k, colorEscogido)) {
-						System.out.println("Correcto, bien hecho");
-						puntuacion = puntuacion + 2;
-						System.out.println("Tu puntuacion es " + puntuacion);
-					} else {
-						System.out.println("Incorrecto, fin del juego");
-						salida = 1;
-						k = 3 + i;	
-					}
-					k++;
-				}
-			}else if(modo == 3) {
-				while(k < (3 + i)) {
-					System.out.println("Introduce el color en la posición " + (k + 1) + ": ");
-					System.out.println("Introduce x para tener una ayuda (tienes " + ayuda + " ayudas");
-					char secuenciaUsuario = new Scanner(System.in).next().charAt(0);
-					if(ayuda == 0 && secuenciaUsuario == 'x') {
+					tColores1 colorEscogido = charToColor(secuenciaUsuario,secuenciaColores1[k]);
+					if(secuenciaUsuario == 'x' && ayuda == 0) {
 						System.out.println("no te quedan ayudas, juegatela");
 						secuenciaUsuario = new Scanner(System.in).next().charAt(0);
-					}
-					tColores1 colorEscogido = charToColor(secuenciaUsuario,secuenciaColores1[k]);
-					if(secuenciaUsuario == 'x') {
+						}
+					if(secuenciaUsuario == 'x' && _numColores == MAX_COLORES_SEQ1 && !(ayuda == 0)) {
+						System.out.println("El siguiente color es " + secuenciaColores1[k]);
 						ayuda = ayuda - 1;
-						puntuacion = puntuacion - 10;
+						persona1.setPuntuacion(persona1.getPuntuacion() - 10);
+						if(persona1.getPuntuacion() < 0) {
+							persona1.setPuntuacion(-2);
+						}
+						System.out.println("Te quedan " + ayuda + " ayudas");
 					}
-					if (comprobarColor1(k, colorEscogido) || secuenciaUsuario == 'x') {
+					if (comprobarColor1(k, colorEscogido) || (secuenciaUsuario == 'x' && _numColores == MAX_COLORES_SEQ1)) {
 						System.out.println("Correcto, bien hecho");
-						puntuacion = puntuacion + 2;
-						System.out.println("Tu puntuacion es " + puntuacion);
+						persona1.setPuntuacion(persona1.getPuntuacion() + 2);
+						System.out.println("Tu puntuacion es " + persona1.getPuntuacion());
 					} else {
 						System.out.println("Incorrecto, fin del juego");
 						salida = 1;
@@ -265,25 +247,21 @@ import java.util.Random;
 					}
 					k++;
 				}
-			}
+				persona1.setPuntuacion(persona1.getPuntuacion() + 5);
 			if(salida == 1) {
 				System.exit(0);
 			}
 	
-			if (i == 12 - 3 && modo == 2) {
+			if (i == 12 - 3 && _numColores == MAX_COLORES_SEQ) {
 				System.out.println("Has ganado, terminaste el juego");
-				puntuacion = puntuacion + 40;
-				puntuacionFinal = puntuacion;
+				persona1.setPuntuacion(persona1.getPuntuacion() + 40);
+				System.out.println("Tu puntuacion final ha sido " + persona1.getPuntuacion());
 				menu();
 			}
-			if (i == 15 - 3 && modo == 3) {
+			if (i == 15 - 3 && _numColores == MAX_COLORES_SEQ1) {
 				System.out.println("Has ganado, terminaste el juego");
-				puntuacion = puntuacion + 40;
-				puntuacionFinal = puntuacionFinal * 2;
-				puntuacionFinal = puntuacion;
-				if(puntuacionFinal < 0) {
-					puntuacionFinal = 0;
-				}
+				persona1.setPuntuacion(persona1.getPuntuacion() + 40);
+				System.out.println("Tu puntuacion final ha sido " + (persona1.getPuntuacion())*2);
 				menu();
 			}
 			
