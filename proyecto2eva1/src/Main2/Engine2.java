@@ -30,6 +30,10 @@ import java.util.Random;
 	private int salida = 0;
 	private Persona2 persona1 = new Persona2();
 	private tColores1[] secuenciaColores1 = new tColores1[15];
+	
+	public void separador() {
+		System.out.println("------------------------------------------------------------");
+	}
 
 	/**
 	 * Este método lo utilizamos para saber cual es la primera letra de cada color
@@ -121,7 +125,7 @@ import java.util.Random;
 				secuenciaColores1[i] = intToColor(aleatorio);
 			}
 	}
-		
+
 	/**
 	 * Este método comprueba si el jugador ha acertado o ha fallado el color.
 	 * 
@@ -145,15 +149,45 @@ import java.util.Random;
 			}
 	}
 	
+	public boolean usarAyuda(int _index) {
+		if (ayuda > 0) {
+			ayuda --;
+			System.out.println( "Introduce el " + secuenciaColores1[_index] + " y te quedan " + this.ayuda + " ayudas");
+			return true;
+		}else {
+			System.out.println("No te quedan mas ayudas");
+			return false;
+		}
+	}
+	
 	/**
 	 * Este es el menú de inicio para jugar.
 	 */
-	public int menu() {
+	public void menu() {
+		separador();
+		System.out.println("1- Salir \n2- Jugar en modo fácil \n3- Jugar en modo difícil");
+		separador();
+	}
+
+	/**
+	 * Este es el inicio del juego donde te saludan, tienes que poner tu nombre y
+	 * pulsar ENTER para empezar a jugar.
+	 */
+	public int start() {
+		separador();
+		System.out.println("Welcome to Simon Dice!");
+		System.out.println("What is your name? ");
+		separador();
+		Scanner scanner = new Scanner(System.in);
+		String persona = scanner.nextLine();
+		persona1.setNombre(persona);
+		System.out.println("Hello " + persona1.getNombre() + ", press ENTER to start playing");
+		Scanner scanner1 = new Scanner(System.in);
+		scanner1.nextLine();
 		persona1.setPuntuacion(0);
 		tModo modo = null;
 		int _numColores = 0;
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("1- Salir \n2- Jugar en modo fácil \n3- Jugar en modo difícil");
+		menu();
 		Scanner sc1 = new Scanner(System.in);
 		int menu = sc1.nextInt();
 		switch (menu) {
@@ -177,26 +211,12 @@ import java.util.Random;
 		}
 		return _numColores;
 	}
-
-	/**
-	 * Este es el inicio del juego donde te saludan, tienes que poner tu nombre y
-	 * pulsar ENTER para empezar a jugar.
-	 */
-	public void start() {
-		System.out.println("Welcome to Simon Dice!");
-		System.out.println("What is your name? ");
-		Scanner scanner = new Scanner(System.in);
-		String persona = scanner.nextLine();
-		persona1.setNombre(persona);
-		System.out.println("Hello " + persona1.getNombre() + ", press ENTER to start playing");
-		play();
-	}
 	
 	/**
 	 * Control del juego.
 	 */
 	public void play() {
-		int _numColores = menu();
+		int _numColores = start();
 		generarSecuencia(_numColores);
 		for (int i = 0; i < 20; i++) {
 			int k = 0;
@@ -221,22 +241,21 @@ import java.util.Random;
 				while(k < (3 + i)) {
 					System.out.println("Introduce el color en la posición " + (k + 1) + ": ");
 					System.out.println("Si quieres usar ayuda pulsa x (solo para modo dificil)");
+					Scanner s = new Scanner(System.in);
 					char secuenciaUsuario = new Scanner(System.in).next().charAt(0);
 					tColores1 colorEscogido = charToColor(secuenciaUsuario,secuenciaColores1[k]);
-					if(secuenciaUsuario == 'x' && ayuda == 0) {
-						System.out.println("no te quedan ayudas, juegatela");
-						secuenciaUsuario = new Scanner(System.in).next().charAt(0);
+					if(secuenciaUsuario == 'x' && _numColores == MAX_COLORES_SEQ1){
+						if(usarAyuda(k)) {
+							persona1.setPuntuacion(persona1.getPuntuacion() - 10);
+							if(persona1.getPuntuacion() < 0) {
+								persona1.setPuntuacion(-2);
+							}
 						}
-					if(secuenciaUsuario == 'x' && _numColores == MAX_COLORES_SEQ1 && !(ayuda == 0)) {
-						System.out.println("El siguiente color es " + secuenciaColores1[k]);
-						ayuda = ayuda - 1;
-						persona1.setPuntuacion(persona1.getPuntuacion() - 10);
-						if(persona1.getPuntuacion() < 0) {
-							persona1.setPuntuacion(-2);
-						}
-						System.out.println("Te quedan " + ayuda + " ayudas");
+						secuenciaUsuario = s.next().charAt(0);
+						colorEscogido = charToColor(secuenciaUsuario,secuenciaColores1[k]);
 					}
-					if (comprobarColor1(k, colorEscogido) || (secuenciaUsuario == 'x' && _numColores == MAX_COLORES_SEQ1)) {
+					
+					if (comprobarColor1(k, colorEscogido)) {
 						System.out.println("Correcto, bien hecho");
 						persona1.setPuntuacion(persona1.getPuntuacion() + 2);
 						System.out.println("Tu puntuacion es " + persona1.getPuntuacion());
@@ -264,7 +283,6 @@ import java.util.Random;
 				System.out.println("Tu puntuacion final ha sido " + (persona1.getPuntuacion())*2);
 				menu();
 			}
-			
       }
    }
 }

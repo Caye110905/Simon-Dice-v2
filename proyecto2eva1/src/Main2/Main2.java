@@ -11,7 +11,7 @@ public class Main2 {
      public static void main(String[] args) {
 		
 		Engine2 Engine = new Engine2();
-		Engine.start();
+		Engine.play();
 	
 	}
 
