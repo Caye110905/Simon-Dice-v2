@@ -75,7 +75,6 @@ import java.util.Random;
 		return colores;
 	}
 	
-
 	/**
 	 * Método para dar un número y nos devuelve cualquiera de los 4 colores puestos
 	 * anteriormente en el enum tColores.
